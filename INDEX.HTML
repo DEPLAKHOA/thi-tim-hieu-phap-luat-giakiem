@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Cuộc thi Tìm hiểu Pháp luật xã Gia Kiệm 2026</title>
+<style>
+   body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    margin: 0; 
+    
+    /* 1. Đường dẫn hình ảnh của bạn */
+    background-image: url("https://lh3.googleusercontent.com/u/0/d/1EaZMcge5H7k9riprfIsAc8Eb2yPed-cI"); 
+    
+    /* 2. Cố định hình nền không cuộn theo trang */
+    background-attachment: fixed; 
+    
+    /* 3. Không cho phép lặp lại hình ảnh */
+    background-repeat: no-repeat; 
+    
+    /* 4. Quan trọng nhất: Phủ kín toàn bộ màn hình */
+    background-size: cover; 
+    
+    /* 5. Căn giữa hình ảnh */
+    background-position: center;
+
+    display: flex; 
+    justify-content: center; 
+    min-height: 100vh;
+}
+  .main { 
+    width: 100%; 
+    max-width: 950px; 
+    padding: 25px; 
+    /* Lớp nền trắng mờ để nổi bật nội dung */
+    background: rgba(255, 255, 255, 0.92); 
+    min-height: 100vh; 
+    box-shadow: 0 0 30px rgba(0,0,0,0.2); 
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Bố cục chia đôi khi làm bài: Nội dung và Bảng câu hỏi */
+  .quiz-container { display: flex; gap: 20px; }
+  .questions-section { flex: 3; }
+  .navigation-section { 
+    flex: 1; 
+    position: sticky; 
+    top: 20px; 
+    height: fit-content;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+
+  #info-screen { text-align: center; padding: 20px; }
+  .input-group { 
+    text-align: left; max-width: 500px; margin: 0 auto; 
+    background: #fff; padding: 30px; border-radius: 12px; border: 1px solid #dee2e6;
+  }
+  input[type="text"], input[type="email"] { 
+    width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ced4da; border-radius: 6px; font-size: 16px;
+  }
+  
+  .timer { 
+    background: #d9534f; color: white; font-size: 24px; font-weight: bold; 
+    text-align: center; padding: 10px; border-radius: 8px; margin-bottom: 20px;
+  }
+
+  /* Style cho từng câu hỏi */
+  .question-card { 
+    margin-bottom: 25px; padding: 20px; background: #fff; border-radius: 8px;
+    border-left: 5px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  .answer-option {
+    display: flex; align-items: center; padding: 10px; cursor: pointer;
+    border: 1px solid #eee; margin-bottom: 8px; border-radius: 6px;
+  }
+  .answer-option:hover { background: #f0f7ff; }
+  .answer-option input { margin-right: 12px; width: 18px; height: 18px; }
+
+  /* Grid số thứ tự câu hỏi */
+  .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; }
+  .nav-item { 
+    padding: 10px 5px; background: #eee; border: 1px solid #ccc; 
+    border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold;
+  }
+  .nav-item.active { background: #28a745; color: white; border-color: #1e7e34; }
+
+  #submit-btn { 
+    background: #28a745; color: white; border: none; padding: 18px; 
+    font-size: 20px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; 
+  }
+  
+  @media (max-width: 768px) 
+  {
+    .quiz-container { flex-direction: column; }
+    .navigation-section { position: static; order: -1; }
+  }
+/* Style riêng cho khu vực QR */
+  .qr-section { margin-top: 30px; padding: 20px; border-top: 1px solid #eee; background-color: #fafafa; border-radius: 8px; }
+  .qr-code-img { max-width: 150px; height: auto; border: 1px solid #ccc; padding: 5px; background: white; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="main">
+  <div style="text-align: center; margin-bottom: 20px;">
+   <img src="https://lh3.googleusercontent.com/u/0/d/1mPbec-OotP3CjpZ0r_KKnSjSAD4kSCb-" alt="Banner Gia Kiệm" style="width:100%;">
+
+  </div>
+
+  <div id="info-screen">
+    <div class="input-group">
+      <h2 style="color: #0056b3; text-align: center;">THÔNG TIN THÍ SINH</h2>
+      <label>Họ và tên:</label>
+      <input id="name" type="text" placeholder="Nguyễn Văn A">
+      <label>Địa chỉ:</label>
+      <input id="address" type="text" placeholder="Nơi cư trú hoặc đơn vị công tác...">
+      <label>Số điện thoại:</label>
+      <input id="phone" type="text" placeholder="Số điện thoại">
+      <button class="btn-start" style="width:100%; padding:15px; background:#007bff; color:white; border:none; border-radius:30px; font-weight:bold; cursor:pointer;" onclick="startQuiz()">BẮT ĐẦU THI</button>
+    </div>
+<div class="qr-section">
+      <p style="margin: 0; color: #555; font-weight: bold;">Quét mã QR để biết thêm về quy định thi và giải thưởng</p>
+      <p style="margin: 5px 0; color: #777; font-size: 14px;">(Hoặc để lấy tài liệu tham khảo)</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://zalo.me/g/your_group_id" 
+           alt="Mã QR Nhóm Zalo" 
+           class="qr-code-img">
+    </div>
+  </div>
+
+  <div id="quiz-screen" style="display:none;">
+    <div class="timer" id="timer">15:00</div>
+    
+    <div class="quiz-container">
+      <div class="questions-section" id="quiz-content"></div>
+      
+      <div class="navigation-section">
+        <b style="color:#0056b3;">BẢNG CÂU HỎI</b>
+        <div class="nav-grid" id="nav-grid"></div>
+        <p style="font-size: 12px; color: #666; margin-top: 15px;">(Màu xanh là câu đã làm)</p>
+      </div>
+    </div>
+    
+    <button id="submit-btn" onclick="submitQuiz()" style="margin-top:30px;">NỘP BÀI THI</button>
+  </div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwy9zNJ0ABzALjtDrUZ4N4jltvpz3qtNOJNctCL9Xvn-vYac2s9t7h9oj0sFiChvu-r/exec";
+
+const questionsBank = [
+  {q:"Nguyễn Ái Quốc gửi bản “Yêu sách của nhân dân An Nam” vào năm nào?", a:["1917","1919","1918","1920"], correct:1},
+  {q:"Nguyễn Tất Thành ra đi tìm đường cứu nước ngày nào?", a:["5/6/1911","2/6/1911","19/5/1890","4/6/1911"], correct:0},
+  {q:"Cách mạng giải phóng dân tộc phải theo con đường nào?", a:["Tư sản","Vô sản","XHCN","Ruộng đất"], correct:1},
+  {q:"Ưu điểm lớn nhất của Khổng Tử theo HCM là gì?", a:["Hiếu học","Quản lý đạo đức","Tu dưỡng cá nhân","Tự do"], correct:2},
+  {q:"Sức mạnh dân tộc theo tư tưởng HCM bao gồm?", a:["Yêu nước","Tự lực","Đoàn kết","Cả 3 yếu tố trên"], correct:3},
+  {q:"Mục tiêu cao nhất của Chủ nghĩa xã hội là gì?", a:["Phát triển kinh tế","Nâng cao đời sống dân","Khoa học","Chính trị"], correct:1},
+  {q:"Đại đoàn kết dân tộc được xác định là?", a:["Kế sách tạm thời","Chiến lược lâu dài","Phương pháp đối phó","Nhiệm vụ phụ"], correct:1},
+  {q:"Đảng Cộng sản Việt Nam là Đảng của?", a:["Giai cấp công nhân","Nhân dân lao động","Toàn dân tộc","Cả 3 phương án"], correct:3},
+  {q:"Nhà nước của dân là nhà nước?", a:["Do dân bầu ra","Dân làm chủ","Phục vụ lợi ích của dân","Cả 3 đúng"], correct:3},
+  {q:"“Một dân tộc dốt là một dân tộc...”?", a:["Lạc hậu","Yếu","Kém phát triển","Bị cô lập"], correct:1},
+  {q:"Nguyên tắc xây dựng Đảng quan trọng nhất là?", a:["Tập trung dân chủ","Tự phê bình","Đoàn kết thống nhất","Kỷ luật nghiêm minh"], correct:0},
+  {q:"Động lực chính của CNXH là gì?", a:["Khoa học","Con người","Tiền vốn","Tài nguyên"], correct:1},
+  {q:"Thành tựu chính trị quan trọng nhất là?", a:["Độc lập dân tộc","Ổn định xã hội","Kinh tế phát triển","Mở rộng ngoại giao"], correct:1},
+  {q:"Ham muốn tột bậc của Bác Hồ là gì?", a:["Nước độc lập","Dân tự do","Đồng bào có cơm ăn áo mặc","Tất cả các ý trên"], correct:3},
+  {q:"Đạo đức cách mạng theo HCM là?", a:["Từ trên trời rơi xuống","Do tu dưỡng bền bỉ","Có sẵn trong người","Do đi học mà có"], correct:1}
+];
+
+let shuffled, startTime, countdown;
+let timeLeft = 15 * 60;
+
+// CHỐNG THI LẠI
+if(localStorage.getItem("done")){
+  alert("Bạn đã hoàn thành bài thi này!");
+  document.body.innerHTML = "<div style='text-align:center; padding-top:100px; font-family: sans-serif;'><h1>BẠN ĐÃ NỘP BÀI THÀNH CÔNG!</h1><p>Kết quả của bạn đã được ghi nhận vào hệ thống.</p></div>";
+}
+
+function startQuiz() {
+  const name = document.getElementById("name").value.trim();
+  if(!name) return alert("Vui lòng nhập Họ tên!");
+  
+  document.getElementById("info-screen").style.display = "none";
+  document.getElementById("quiz-screen").style.display = "block";
+  
+  renderQuiz();
+  startTime = Date.now();
+  countdown = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  let m = Math.floor(timeLeft/60), s = timeLeft%60;
+  document.getElementById("timer").innerText = `${m}:${s<10?'0':''}${s}`;
+  if(timeLeft <= 0) { 
+    clearInterval(countdown); 
+    alert("Hết giờ làm bài!");
+    submitQuiz(); 
+  }
+  timeLeft--;
+}
+
+function renderQuiz() {
+  const content = document.getElementById("quiz-content");
+  const nav = document.getElementById("nav-grid");
+  content.innerHTML = ""; nav.innerHTML = "";
+  
+  shuffled = [...questionsBank].sort(() => Math.random() - 0.5);
+
+  shuffled.forEach((q, i) => {
+    let card = document.createElement("div");
+    card.className = "question-card";
+    card.id = "question-box-" + i;
+    let html = `<b>Câu ${i+1}: ${q.q}</b>`;
+    q.a.forEach(ans => {
+      const isRight = (ans === q.a[q.correct]);
+      html += `<label class="answer-option">
+                <input type="radio" name="q${i}" value="${isRight}" onchange="updateNav(${i})">
+                <span>${ans}</span>
+              </label>`;
+    });
+    card.innerHTML = html;
+    content.appendChild(card);
+
+    let navBtn = document.createElement("div");
+    navBtn.className = "nav-item";
+    navBtn.id = "nav-item-" + i;
+    navBtn.innerText = i + 1;
+    navBtn.onclick = () => document.getElementById("question-box-"+i).scrollIntoView({behavior: 'smooth'});
+    nav.appendChild(navBtn);
+  });
+}
+
+function updateNav(index) {
+  document.getElementById("nav-item-" + index).classList.add("active");
+}
+
+function submitQuiz() {
+  clearInterval(countdown);
+  let correctCount = 0;
+  
+  // Kiểm tra điểm số
+  shuffled.forEach((q, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if(selected && selected.value === "true") correctCount++;
+  });
+
+  const totalQ = shuffled.length;
+  const percent = ((correctCount / totalQ) * 100).toFixed(2);
+  const timeUsed = Math.floor((Date.now() - startTime) / 1000);
+
+  // Thu thập dữ liệu từ các ID có sẵn trong file của bạn
+  const data = {
+    name: document.getElementById("name").value,
+    address: document.getElementById("address").value,
+    phone: document.getElementById("phone").value, // Fix: lấy đúng ID phone
+    score: `${correctCount}/${totalQ}`,
+    percentage: percent + "%",
+    time: timeUsed + " giây"
+  };
+
+  alert(`Kết quả: ${data.score} câu đúng (${data.percentage})\nThời gian: ${data.time}`);
+
+  // Gửi dữ liệu qua Google Sheets
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors", // Giữ nguyên theo thiết kế Web App cũ
+    cache: "no-cache",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
+    localStorage.setItem("done", "true");
+    location.reload(); // Load lại để hiện màn hình "Đã thi xong"
+  })
+  .catch(err => {
+    console.error("Lỗi:", err);
+    alert("Có lỗi khi gửi bài, vui lòng kiểm tra kết nối mạng.");
+  });
+}
+</script>
