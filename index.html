@@ -7,7 +7,7 @@
    body { 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
     margin: 0; 
-    background-image: url("https://i.imgur.com/8N0vH8f.png"); 
+    background-image: url("https://lh3.googleusercontent.com/u/0/d/1EaZMcge5H7k9riprfIsAc8Eb2yPed-cI"); 
     background-attachment: fixed; 
     background-repeat: no-repeat; 
     background-size: cover; 
@@ -61,11 +61,11 @@
     border-left: 5px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   }
   .answer-option {
-    display: flex; align-items: center; padding: 10px; cursor: pointer;
+    display: flex; align-items: center; padding: 12px; cursor: pointer;
     border: 1px solid #eee; margin-bottom: 8px; border-radius: 6px; text-align: left;
   }
   .answer-option:hover { background: #f0f7ff; }
-  .answer-option input { margin-right: 12px; width: 18px; height: 18px; cursor: pointer; }
+  .answer-option input { margin-right: 12px; width: 20px; height: 20px; cursor: pointer; }
 
   .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 15px; }
   .nav-item { 
@@ -82,6 +82,11 @@
   @media (max-width: 768px) {
     .quiz-container { flex-direction: column; }
     .navigation-section { position: static; order: -1; }
+
+/* Style riêng cho khu vực QR */
+  .qr-section { margin-top: 30px; padding: 20px; border-top: 1px solid #eee; background-color: #fafafa; border-radius: 8px; }
+  .qr-code-img { max-width: 150px; height: auto; border: 1px solid #ccc; padding: 5px; background: white; margin-top: 10px; }
+
   }
 </style>
 </head>
@@ -89,7 +94,7 @@
 
 <div class="main">
   <div style="text-align: center; margin-bottom: 20px;">
-    <img src="https://i.imgur.com/8N0vH8f.png" alt="Banner" style="width:100%; border-radius: 8px;">
+   <img src="https://lh3.googleusercontent.com/u/0/d/1mPbec-OotP3CjpZ0r_KKnSjSAD4kSCb-" alt="Banner Gia Kiệm" style="width:100%;">
   </div>
 
   <div id="info-screen">
@@ -114,6 +119,14 @@
       <button class="btn-start" style="width:100%; padding:15px; background:#007bff; color:white; border:none; border-radius:30px; font-weight:bold; cursor:pointer;" onclick="startQuiz()">BẮT ĐẦU THI</button>
     </div>
   </div>
+<div class="qr-section">
+      <p style="margin: 0; color: #555; font-weight: bold;">Quét mã QR để biết thêm về quy định thi và giải thưởng</p>
+      <p style="margin: 5px 0; color: #777; font-size: 14px;">(Hoặc để lấy tài liệu tham khảo)</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://zalo.me/g/your_group_id" 
+           alt="Mã QR Nhóm Zalo" 
+           class="qr-code-img">
+    </div>
+
 
   <div id="quiz-screen" style="display:none;">
     <div class="timer" id="timer">15:00</div>
@@ -122,7 +135,9 @@
       <div class="navigation-section">
         <b style="color:#0056b3;">TIẾN ĐỘ</b>
         <div class="nav-grid" id="nav-grid"></div>
-        <p style="font-size: 12px; color: #666; margin-top: 15px;">(Xanh là đã chọn)</p>
+        <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+        <img src="https://via.placeholder.com/150?text=QR+Zalo" alt="QR Code" style="width:100px; margin-bottom: 10px;">
+        <p style="font-size: 11px; color: #666;">Quét mã để được hỗ trợ</p>
       </div>
     </div>
     <button id="submit-btn" onclick="submitQuiz()" style="margin-top:30px;">NỘP BÀI THI</button>
@@ -130,8 +145,8 @@
 </div>
 
 <script>
-// THAY LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwy9zNJ0ABzALjtDrUZ4N4jltvpz3qtNOJNctCL9Xvn-vYac2s9t7h9oj0sFiChvu-r/exec";
+// ĐƯỜNG DẪN WEB APP CỦA BẠN (Đã sửa đúng link từ file cũ)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzkyTF5XLcTXoPEAyQtEa-cTsrwwfjXTd3z6PFkJ0GgjM1NBCOJIDNSbmphfiBKOy3t/exec";
 
 const questionsBank = [
   {q:"Nguyễn Ái Quốc gửi bản “Yêu sách của nhân dân An Nam” vào năm nào?", a:["1917","1919","1918","1920"], correct:1},
@@ -144,14 +159,35 @@ const questionsBank = [
   {q:"Đảng Cộng sản Việt Nam là Đảng của?", a:["Giai cấp công nhân","Nhân dân lao động","Toàn dân tộc","Cả 3 phương án"], correct:3},
   {q:"Nhà nước của dân là nhà nước?", a:["Do dân bầu ra","Dân làm chủ","Phục vụ lợi ích của dân","Cả 3 đúng"], correct:3},
   {q:"“Một dân tộc dốt là một dân tộc...”?", a:["Lạc hậu","Yêu","Kém phát triển","Bị cô lập"], correct:1}
+ {q:"Nguyễn Ái Quốc gửi bản “Yêu sách của nhân dân An Nam” vào năm nào?", a:["1917","1919","1918","1920"], correct:1},
+  {q:"Nguyễn Tất Thành ra đi tìm đường cứu nước ngày nào?", a:["5/6/1911","2/6/1911","19/5/1890","4/6/1911"], correct:0},
+  {q:"Cách mạng thuộc địa thắng trước vì?", a:["Địch yếu","Lực lượng mạnh","Dân tộc mạnh","Thuộc địa là trung tâm"], correct:3},
+  {q:"Cách mạng bạo lực là?", a:["Vũ trang","Chính trị","Ngoại giao","Kết hợp"], correct:3},
+  {q:"Vận dụng tư tưởng dân tộc cần?", a:["Yêu nước","Quan điểm CN","Đoàn kết","Cả 3"], correct:3},
+  {q:"Mục tiêu CNXH?", a:["Kinh tế","Đời sống","Khoa học","Phát triển"], correct:1},
+  {q:"Động lực CNXH?", a:["Khoa học","Con người","Chính trị","Quốc tế"], correct:1},
+  {q:"Việt Nam đi lên CNXH?", a:["Lược qua","Băng qua","Bỏ qua TBCN","Xuyên qua"], correct:2},
+  {q:"Nguyên nhân thất bại cuối XIX?", a:["Không đoàn kết","Lãnh đạo phong kiến","Sai đường","Cả 3"], correct:3},
+  {q:"Đại đoàn kết là?", a:["Kế sách","Chiến lược","Phương pháp","Then chốt"], correct:1},
+  {q:"Lực lượng chính đoàn kết?", a:["CN","CN ND","Học trò","CN ND trí thức"], correct:1},
+  {q:"Đảng trong mặt trận?", a:["Thành viên","Lãnh đạo","Cả 2","Cả 3"], correct:2},
+  {q:"Tổ chức mặt trận là?", a:["Đảng phái","Nhân dân","Giai cấp","Mọi tổ chức"], correct:3},
+  {q:"Ngoại giao cần?", a:["Tự lực","Độc lập","Ngoại sinh","Tất cả"], correct:0},
+  {q:"Nguyên tắc ngoại giao?", a:["Cứng","Mềm","Cả 2","Dĩ bất biến"], correct:2},
+  {q:"“Cách mệnh trước hết…” ở tác phẩm nào?", a:["Bản án","Đường Cách mệnh","Chánh cương","Chính trị"], correct:1},
+  {q:"Đảng là của ai?", a:["Công nhân","Nhân dân","Cả 2","Toàn dân"], correct:3},
+  {q:"Nguyên tắc xây dựng Đảng?", a:["Tập trung","Phê bình","Đoàn kết","Cả 3"], correct:3},
+  {q:"Đảng phải đổi mới?", a:["Chính trị","Tổ chức","Tư tưởng","Cả 3"], correct:3},
+  {q:"Nhà nước của dân?", a:["Do dân","Dân là chủ","Phục vụ dân","Cả 3"], correct:3}
+
 ];
 
 let shuffled, startTime, countdown;
 let timeLeft = 15 * 60;
 
-// Chống thi lại
+// Chống thi lại bằng trình duyệt (Dự phòng)
 if(localStorage.getItem("done")){
-  document.body.innerHTML = "<div style='text-align:center; padding-top:100px; font-family:sans-serif;'><h1>BẠN ĐÃ NỘP BÀI THÀNH CÔNG!</h1><p>Kết quả đã được ghi nhận vào hệ thống.</p></div>";
+  document.body.innerHTML = "<div style='text-align:center; padding-top:100px; font-family:sans-serif;'><h1>BẠN ĐÃ NỘP BÀI THÀNH CÔNG!</h1><p>Hệ thống đã ghi nhận kết quả của bạn.</p></div>";
 }
 
 function startQuiz() {
@@ -164,15 +200,43 @@ function startQuiz() {
   if(!name || !birth || !address || !cccd || !phone) {
     return alert("Vui lòng điền đầy đủ các thông tin có dấu (*)");
   }
-  
-  document.getElementById("info-screen").style.display = "none";
-  document.getElementById("quiz-screen").style.display = "block";
-  
-  renderQuiz();
-  startTime = Date.now();
-  countdown = setInterval(updateTimer, 1000);
-}
 
+  const btn = document.querySelector(".btn-start");
+  btn.innerText = "ĐANG KIỂM TRA HỆ THỐNG...";
+  btn.disabled = true;
+
+  // Xử lý kiểm tra CCCD bằng phương pháp JSONP để vượt lỗi CORS
+  const callbackName = 'jsonpCallback_' + Math.round(100000 * Math.random());
+  
+  window[callbackName] = function(data) {
+    delete window[callbackName];
+    const scriptTag = document.getElementById('jsonpScript');
+    if (scriptTag) scriptTag.remove();
+
+    if (data.status === "exists") {
+      alert("Số CCCD này đã tham gia thi trước đó. Mỗi thí sinh chỉ được thi 01 lần!");
+      btn.innerText = "BẮT ĐẦU THI";
+      btn.disabled = false;
+    } else {
+      // Cho phép vào màn hình thi
+      document.getElementById("info-screen").style.display = "none";
+      document.getElementById("quiz-screen").style.display = "block";
+      renderQuiz();
+      startTime = Date.now();
+      countdown = setInterval(updateTimer, 1000);
+    }
+  };
+
+  const script = document.createElement('script');
+  script.id = 'jsonpScript';
+  script.src = `${SCRIPT_URL}?action=checkCCCD&cccd=${encodeURIComponent(cccd)}&callback=${callbackName}`;
+  script.onerror = function() {
+    alert("Lỗi kết nối máy chủ. Hãy kiểm tra lại SCRIPT_URL hoặc mạng!");
+    btn.innerText = "BẮT ĐẦU THI";
+    btn.disabled = false;
+  };
+  document.body.appendChild(script);
+}
 function updateTimer() {
   let m = Math.floor(timeLeft/60), s = timeLeft%60;
   document.getElementById("timer").innerText = `${m}:${s<10?'0':''}${s}`;
@@ -193,7 +257,7 @@ function renderQuiz() {
     let card = document.createElement("div");
     card.className = "question-card";
     card.id = "question-box-" + i;
-    let html = `<b>Câu ${i+1}: ${q.q}</b>`;
+    let html = `<b>Câu ${i+1}: ${q.q}</b><br><br>`;
     q.a.forEach(ans => {
       const isRight = (ans === q.a[q.correct]);
       html += `<label class="answer-option">
@@ -240,7 +304,7 @@ function submitQuiz() {
     time: timeUsed + " giây"
   };
 
-  alert(`Hoàn thành! Kết quả: ${data.score} (${data.percentage})`);
+  alert(`Nộp bài thành công! Kết quả: ${data.score} (${data.percentage})`);
 
   fetch(SCRIPT_URL, {
     method: "POST",
@@ -249,9 +313,6 @@ function submitQuiz() {
   }).then(() => {
     localStorage.setItem("done", "true");
     location.reload();
-  }).catch(err => {
-    console.error(err);
-    alert("Lỗi gửi dữ liệu, hãy kiểm tra mạng!");
   });
 }
 </script>
