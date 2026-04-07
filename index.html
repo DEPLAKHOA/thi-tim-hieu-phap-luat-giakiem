@@ -205,20 +205,21 @@ function startQuiz() {
   btn.innerText = "ĐANG KIỂM TRA HỆ THỐNG...";
   btn.disabled = true;
 
-  // Xử lý kiểm tra CCCD bằng phương pháp JSONP để vượt lỗi CORS
+  // Tạo một tên hàm tạm thời để nhận dữ liệu trả về
   const callbackName = 'jsonpCallback_' + Math.round(100000 * Math.random());
   
   window[callbackName] = function(data) {
+    // Xóa dấu vết sau khi kiểm tra xong
     delete window[callbackName];
-    const scriptTag = document.getElementById('jsonpScript');
-    if (scriptTag) scriptTag.remove();
+    const oldScript = document.getElementById('jsonpScript');
+    if (oldScript) oldScript.remove();
 
     if (data.status === "exists") {
       alert("Số CCCD này đã tham gia thi trước đó. Mỗi thí sinh chỉ được thi 01 lần!");
       btn.innerText = "BẮT ĐẦU THI";
       btn.disabled = false;
     } else {
-      // Cho phép vào màn hình thi
+      // Cho phép vào thi
       document.getElementById("info-screen").style.display = "none";
       document.getElementById("quiz-screen").style.display = "block";
       renderQuiz();
@@ -227,17 +228,17 @@ function startQuiz() {
     }
   };
 
+  // Gửi yêu cầu kiểm tra bằng cách chèn thẻ <script>
   const script = document.createElement('script');
   script.id = 'jsonpScript';
   script.src = `${SCRIPT_URL}?action=checkCCCD&cccd=${encodeURIComponent(cccd)}&callback=${callbackName}`;
   script.onerror = function() {
-    alert("Lỗi kết nối máy chủ. Hãy kiểm tra lại SCRIPT_URL hoặc mạng!");
+    alert("Lỗi kết nối máy chủ. Hãy kiểm tra lại SCRIPT_URL hoặc kết nối mạng!");
     btn.innerText = "BẮT ĐẦU THI";
     btn.disabled = false;
   };
   document.body.appendChild(script);
-}
-function updateTimer() {
+}function updateTimer() {
   let m = Math.floor(timeLeft/60), s = timeLeft%60;
   document.getElementById("timer").innerText = `${m}:${s<10?'0':''}${s}`;
   if(timeLeft <= 0) { 
